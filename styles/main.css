@@ -1,0 +1,57 @@
+@import url('https://necolas.github.io/normalize.css/8.0.1/normalize.css');
+
+* {
+    box-sizing: border-box;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    outline: none;
+}
+
+html,
+body,
+table {
+    width: 100%;
+    height: 100%;
+}
+
+td {
+    padding: 1em;
+}
+
+textarea {
+    font-family: monospace;
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin: 1em 0;
+    padding: 0.25em;
+    background: #369;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #47a;
+}
+
+button:active {
+    background: #258;
+}
+
+@media (prefers-color-scheme:dark) {
+    body {
+        background: #111;
+        color: #eee;
+    }
+
+    textarea {
+        background: #222;
+        color: #ccc;
+    }
+}

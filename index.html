@@ -5,11 +5,31 @@
     <title>JSON Functions</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles/main.css" />
     <script type="text/javascript" src="scripts/main.js"></script>
 </head>
 
 <body>
-    <p>GUI coming TBA...</p>
+    <table>
+        <tbody>
+            <tr>
+                <th>Input</th>
+                <th>JSON Functions</th>
+                <th>Output</th>
+            </tr>
+            <tr>
+                <td><textarea id="in" placeholder="JSON or CSV..."></textarea></td>
+                <td>
+                    <button onclick="App.beautify();">Beautify JSON</button>
+                    <button onclick="App.minify();">Minify JSON</button>
+                    <button onclick="App.JSON2CSV();">JSON to CSV</button>
+                    <button onclick="App.CSV2JSON();">CSV to JSON</button>
+                    <button onclick="App.copy();">Copy output to input</button>
+                </td>
+                <td><textarea id="out" readonly></textarea></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 
 </html>

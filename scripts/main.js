@@ -1,6 +1,85 @@
 'use strict';
 
+/**
+ * GUI functions.
+ */
 class App {
+    /**
+     * Return the contents in the input textarea.
+     */
+    static #getInput() {
+        return document.getElementById('in').value;
+    }
+    /**
+     * Return the contents in the output textarea.
+     */
+    static #getOutput() {
+        return document.getElementById('out').value;
+    }
+    /**
+     * Set the contents to the input textarea.
+     */
+    static #setInput(value = '') {
+        document.getElementById('in').value = value;
+    }
+    /**
+     * Set the contents to the output textarea.
+     */
+    static #setOutput(value = '') {
+        document.getElementById('out').value = value;
+    }
+    /**
+     * Beautify the input string.
+     */
+    static beautify() {
+        try {
+            App.#setOutput(JSONCSV.beautify(App.#getInput()));
+        } catch (e) {
+            alert(e);
+        }
+    }
+    /**
+     * Minify the input string.
+     */
+    static minify() {
+        try {
+            App.#setOutput(JSONCSV.minify(App.#getInput()));
+        } catch (e) {
+            alert(e);
+        }
+    }
+    /**
+     * Convert the input JSON to a CSV format.
+     */
+    static JSON2CSV() {
+        try {
+            App.#setOutput(JSONCSV.JSON2CSV(App.#getInput()));
+        } catch (e) {
+            alert(e);
+        }
+    }
+    /**
+     * Convert the input CSV to a JSON format.
+     */
+    static CSV2JSON() {
+        try {
+            App.#setOutput(JSONCSV.CSV2JSON(App.#getInput()));
+        } catch (e) {
+            alert(e);
+        }
+    }
+    /**
+     * Copy the output to the input field.
+     */
+    static copy() {
+        App.#setInput(App.#getOutput());
+    }
+}
+
+/**
+ * Functions for beatufying JSON and converting to and from CSV.
+ */
+class JSONCSV {
     /**
      * The number of spaces to use for indentation in code.
      */
@@ -15,19 +94,19 @@ class App {
      * Add slashes before double quotes in a string.
      */
     static #addSlashes(str = '') {
-        return str.replace('"', '\\"')
+        return typeof str === 'string' ? ('"' + str.replace('"', '\\"') + '"') : str.toString();
     }
     /**
      * Beautify the JSON string parameter.
      */
     static beautify(jsonString = '') {
-        return App.#write(jsonString, App.#NUM_SPACES);
+        return JSONCSV.#write(jsonString, JSONCSV.#NUM_SPACES);
     }
     /**
      * Minify the JSON string parameter.
      */
     static minify(jsonString = '') {
-        return App.#write(jsonString);
+        return JSONCSV.#write(jsonString);
     }
     /**
      * Convert JSON to a CSV string.
@@ -39,25 +118,28 @@ class App {
             objArr.forEach(obj => {
                 if (typeof obj === 'object') {
                     if (!csv.length) {
-                        keys = Object.keys(obj); // sort?
-                        keys.forEach(key => csv += '"' + App.#addSlashes(key) + '", ');
+                        keys = Object.keys(obj);
+                        keys.forEach(key => csv += JSONCSV.#addSlashes(key) + ', ');
                         csv += '\n';
                     }
-                    keys.forEach(key => csv += '"' + App.#addSlashes(obj[key]) + '", ');
+                    keys.forEach(key => csv += JSONCSV.#addSlashes(obj[key]) + ', ');
                     csv += '\n';
                 } else {
-                    csv += '"' + App.#addSlashes(obj) + '"\n';
+                    csv += JSONCSV.#addSlashes(obj) + '\n';
                 }
             });
+            return csv;
+        } else {
+            throw 'Parameter is not of type array.';
         }
     }
     /**
      * Convert a CSV string to JSON.
      */
     static CSV2JSON(csvString = '') {
-        const lines = csvString.split('\n'),
+        const lines = csvString.trim().split('\n'),
             regex = / *(["']?)(.*?[^\1])\1(, *|$)/g,
-            values = lines.map(line => [...line.matchAll(regex)].map(r => r[2])); console.log(values);
+            values = lines.map(line => [...line.matchAll(regex)].map(r => r[2]));
         let json = [];
         if (values[0].length > 1) {
             for (let y = 1; y < values.length; y++) {
@@ -69,7 +151,7 @@ class App {
             }
         } else {
             values.forEach(value => json.push(value));
-        } console.log(json);
-        return JSON.stringify(json, null, App.#NUM_SPACES);
+        }
+        return JSON.stringify(json, null, JSONCSV.#NUM_SPACES);
     }
 }
