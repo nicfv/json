@@ -29,11 +29,27 @@ class App {
         document.getElementById('out').value = value;
     }
     /**
+     * Set the status in the status bar.
+     */
+    static #setStatus(fileType = '', content = '') {
+        // const out = App.#getOutput(), lines = out.split('\n').length, length = out.length;
+        // let fileType = '';
+        // try {
+        //     JSONCSV.minify(out);
+        //     fileType = 'JSON';
+        // } catch (e) {
+        //     fileType = 'CSV';
+        // }
+        document.getElementById('statusbar').textContent = 'Format: ' + fileType + ' | Lines: ' + content.split('\n').length + ' | Length: ' + content.length;
+    }
+    /**
      * Beautify the input string.
      */
     static beautify() {
         try {
-            App.#setOutput(JSONCSV.beautify(App.#getInput()));
+            const out = JSONCSV.beautify(App.#getInput());
+            App.#setOutput(out);
+            App.#setStatus('JSON', out);
         } catch (e) {
             alert(e);
         }
@@ -43,7 +59,9 @@ class App {
      */
     static minify() {
         try {
-            App.#setOutput(JSONCSV.minify(App.#getInput()));
+            const out = JSONCSV.minify(App.#getInput());
+            App.#setOutput(out);
+            App.#setStatus('JSON', out);
         } catch (e) {
             alert(e);
         }
@@ -53,7 +71,9 @@ class App {
      */
     static JSON2CSV() {
         try {
-            App.#setOutput(JSONCSV.JSON2CSV(App.#getInput()));
+            const out = JSONCSV.JSON2CSV(App.#getInput());
+            App.#setOutput(out);
+            App.#setStatus('CSV', out)
         } catch (e) {
             alert(e);
         }
@@ -63,7 +83,9 @@ class App {
      */
     static CSV2JSON() {
         try {
-            App.#setOutput(JSONCSV.CSV2JSON(App.#getInput()));
+            const out = JSONCSV.CSV2JSON(App.#getInput());
+            App.#setOutput(out);
+            App.#setStatus('JSON', out);
         } catch (e) {
             alert(e);
         }
