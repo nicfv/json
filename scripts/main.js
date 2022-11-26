@@ -91,10 +91,16 @@ class JSONCSV {
         return JSON.stringify(JSON.parse(jsonString), null, spaces);
     }
     /**
-     * Add slashes before double quotes in a string.
+     * Double quote and add slashes before double quotes in a string.
      */
     static #addSlashes(str = '') {
-        return typeof str === 'string' ? ('"' + str.replace('"', '\\"') + '"') : str.toString();
+        return '"' + str.replace('"', '\\"') + '"';
+    }
+    /**
+     * Remove excess slashes in a string.
+     */
+    static #removeSlashes(str = '') {
+        return str.replace('\\', '');
     }
     /**
      * Beautify the JSON string parameter.
@@ -130,7 +136,7 @@ class JSONCSV {
             });
             return csv;
         } else {
-            throw 'Parameter is not of type array.';
+            throw 'Input parameter must be an array of valid JSON objects.';
         }
     }
     /**
@@ -138,14 +144,14 @@ class JSONCSV {
      */
     static CSV2JSON(csvString = '') {
         const lines = csvString.trim().split('\n'),
-            regex = / *(["']?)(.*?[^\1])\1(, *|$)/g,
-            values = lines.map(line => [...line.matchAll(regex)].map(r => r[2]));
+            regex = /\s*(["']?)(.*?)\1\s*,/g,
+            values = lines.map(line => [...(line + ',').matchAll(regex)].map(r => r[2]));
         let json = [];
         if (values[0].length > 1) {
             for (let y = 1; y < values.length; y++) {
                 const newObj = {};
                 for (let x = 0; x < values[0].length; x++) {
-                    newObj[values[0][x]] = values[y][x];
+                    values[0][x] && (newObj[JSONCSV.#removeSlashes(values[0][x])] = JSONCSV.#removeSlashes(values[y][x]));
                 }
                 json.push(newObj);
             }

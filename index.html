@@ -10,26 +10,23 @@
 </head>
 
 <body>
-    <table>
-        <tbody>
-            <tr>
-                <th>Input</th>
-                <th>JSON Functions</th>
-                <th>Output</th>
-            </tr>
-            <tr>
-                <td><textarea id="in" placeholder="JSON or CSV..."></textarea></td>
-                <td>
-                    <button onclick="App.beautify();">Beautify JSON</button>
-                    <button onclick="App.minify();">Minify JSON</button>
-                    <button onclick="App.JSON2CSV();">JSON to CSV</button>
-                    <button onclick="App.CSV2JSON();">CSV to JSON</button>
-                    <button onclick="App.copy();">Copy output to input</button>
-                </td>
-                <td><textarea id="out" readonly></textarea></td>
-            </tr>
-        </tbody>
-    </table>
+    <p title="Version">v2.0</p>
+    <div id="l">
+        <h3 title="Paste your JSON or CSV code here.">Input</h3>
+        <textarea id="in" placeholder="JSON or CSV..."></textarea>
+    </div>
+    <div id="m">
+        <h3 title="Click the buttons to execute each function.">JSON Functions</h3>
+        <button onclick="App.beautify();">Beautify JSON</button>
+        <button onclick="App.minify();">Minify JSON</button>
+        <button onclick="App.JSON2CSV();">JSON to CSV</button>
+        <button onclick="App.CSV2JSON();">CSV to JSON</button>
+        <button onclick="App.copy();">Copy output to input</button>
+    </div>
+    <div id="r">
+        <h3 title="Copy the output code here.">Output</h3>
+        <textarea id="out" readonly></textarea>
+    </div>
 </body>
 
 </html>
