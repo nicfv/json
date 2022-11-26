@@ -147,7 +147,7 @@ class JSONCSV {
             regex = /\s*(["']?)(.*?)\1\s*,/g,
             values = lines.map(line => [...(line + ',').matchAll(regex)].map(r => r[2]));
         let json = [];
-        if (values[0].length > 1) {
+        if (values.length > 1 && values[0].length > 1) {
             for (let y = 1; y < values.length; y++) {
                 const newObj = {};
                 for (let x = 0; x < values[0].length; x++) {
@@ -156,7 +156,7 @@ class JSONCSV {
                 json.push(newObj);
             }
         } else {
-            values.forEach(value => json.push(value));
+            json = values.flat();
         }
         return JSON.stringify(json, null, JSONCSV.#NUM_SPACES);
     }
