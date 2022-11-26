@@ -94,13 +94,13 @@ class JSONCSV {
      * Double quote and add slashes before double quotes in a string.
      */
     static #addSlashes(str = '') {
-        return '"' + str.replace('"', '\\"') + '"';
+        return typeof str === 'string' ? ('"' + str.replace(/"/g, '\\"') + '"') : str;
     }
     /**
      * Remove excess slashes in a string.
      */
     static #removeSlashes(str = '') {
-        return str.replace('\\', '');
+        return str.replace(/\\/g, '');
     }
     /**
      * Beautify the JSON string parameter.
@@ -156,7 +156,7 @@ class JSONCSV {
                 json.push(newObj);
             }
         } else {
-            json = values.flat();
+            json = values.flat().map(v => JSONCSV.#removeSlashes(v));
         }
         return JSON.stringify(json, null, JSONCSV.#NUM_SPACES);
     }
