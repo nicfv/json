@@ -20,27 +20,46 @@ class App {
      * Set the contents to the input textarea.
      */
     static #setInput(value = '') {
-        document.getElementById('in').value = value;
+        const inp = document.getElementById('in');
+        inp.value = value;
+        inp.oninput();
     }
     /**
      * Set the contents to the output textarea.
      */
     static #setOutput(value = '') {
-        document.getElementById('out').value = value;
+        const out = document.getElementById('out');
+        out.value = value;
+        out.oninput();
     }
     /**
      * Set the status in the status bar.
      */
-    static #setStatus(fileType = '', content = '') {
-        // const out = App.#getOutput(), lines = out.split('\n').length, length = out.length;
-        // let fileType = '';
-        // try {
-        //     JSONCSV.minify(out);
-        //     fileType = 'JSON';
-        // } catch (e) {
-        //     fileType = 'CSV';
-        // }
-        document.getElementById('statusbar').textContent = 'Format: ' + fileType + ' | Lines: ' + content.split('\n').length + ' | Length: ' + content.length;
+    static setStatus(type = '') {
+        let statusId = '', out = '', fileType = '?';
+        switch (type) {
+            case ('in'): {
+                statusId = 'status_in';
+                out = App.#getInput();
+                break;
+            }
+            case ('out'): {
+                statusId = 'status_out';
+                out = App.#getOutput();
+                break;
+            }
+            default: {
+                throw 'Invalid status type.';
+            }
+        }
+        const lines = out.split('\n').length, length = out.length;
+        try {
+            JSONCSV.minify(out);
+            fileType = 'JSON';
+        } catch (e) {
+            fileType = 'CSV';
+        }
+        document.getElementById(statusId).textContent = 'Format: ' + fileType + ' | Lines: ' + lines + ' | Length: ' + length;
     }
     /**
      * Beautify the input string.
@@ -49,7 +68,6 @@ class App {
         try {
             const out = JSONCSV.beautify(App.#getInput());
             App.#setOutput(out);
-            App.#setStatus('JSON', out);
         } catch (e) {
             alert(e);
         }
@@ -61,7 +79,6 @@ class App {
         try {
             const out = JSONCSV.minify(App.#getInput());
             App.#setOutput(out);
-            App.#setStatus('JSON', out);
         } catch (e) {
             alert(e);
         }
@@ -73,7 +90,6 @@ class App {
         try {
             const out = JSONCSV.JSON2CSV(App.#getInput());
             App.#setOutput(out);
-            App.#setStatus('CSV', out)
         } catch (e) {
             alert(e);
         }
@@ -85,7 +101,6 @@ class App {
         try {
             const out = JSONCSV.CSV2JSON(App.#getInput());
             App.#setOutput(out);
-            App.#setStatus('JSON', out);
         } catch (e) {
             alert(e);
         }
@@ -119,10 +134,10 @@ class JSONCSV {
         return typeof str === 'string' ? ('"' + str.replace(/"/g, '\\"') + '"') : str;
     }
     /**
-     * Remove excess slashes in a string.
+     * Remove preceding slashes before quotes in a string.
      */
     static #removeSlashes(str = '') {
-        return str.replace(/\\/g, '');
+        return str.replace(/\\(["'])/g, '$1');
     }
     /**
      * Beautify the JSON string parameter.

@@ -10,10 +10,11 @@
 </head>
 
 <body>
-    <p title="Version">v2.3</p>
+    <p title="Version">v3.0</p>
     <div id="l">
         <h3 title="Paste your JSON or CSV code here.">Input</h3>
-        <textarea id="in" placeholder="JSON or CSV..."></textarea>
+        <textarea id="in" oninput="App.setStatus('in');" placeholder="JSON or CSV..."></textarea>
+        <div id="status_in" class="statusbar">Ready</div>
     </div>
     <div id="m">
         <h3 title="Click the buttons to execute each function.">JSON Functions</h3>
@@ -25,8 +26,8 @@
     </div>
     <div id="r">
         <h3 title="Copy the output code here.">Output</h3>
-        <textarea id="out" readonly></textarea>
-        <div id="statusbar">Ready</div>
+        <textarea id="out" oninput="App.setStatus('out');" readonly></textarea>
+        <div id="status_out" class="statusbar">Ready</div>
     </div>
 </body>
 
